@@ -1,0 +1,61 @@
+---
+title: "Movie Ratings Project"
+author: "Anusha Vijaykumar Munnolli"
+date: "May 28, 2018"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+
+```{r}
+getwd()
+setwd("C:\\Users\\Anusha Munnolli\\Documents\\R Programming Files")
+movies<- read.csv("Section6-Homework-Data.csv")
+
+head(movies)
+str(movies)
+summary(movies)
+```
+```{r}
+levels(movies$Studio)
+levels(movies$Genre)
+```
+
+```{r}
+a<- movies[(movies$Studio== "Buena Vista Studios" | movies$Studio== "Fox" |
+           movies$Studio== "Paramount Pictures" | movies$Studio== "Sony" |
+             movies$Studio== "Universal" | movies$Studio== "WB") & 
+             (movies$Genre=="action" | movies$Genre=="adventure" | 
+                movies$Genre=="animation" | movies$Genre=="comedy" |
+                movies$Genre=="drama"),] 
+head(a)
+str(a)
+
+```
+
+```{r}
+library(ggplot2)
+
+b<- ggplot (data= a, aes(x= Genre, y= Gross...US))
+b+ geom_jitter(aes(color= Studio, size=Budget...mill.)) +
+  geom_boxplot(alpha =0.5, outlier.color = NA) + 
+  ggtitle("Domestic Gross % by Genre") +
+  xlab("Genre") +
+  ylab("Gross % US") +
+  theme(axis.title.x = element_text(size= 20, color= "Blue", family = "serif"),
+        axis.title.y = element_text(size= 20, color= "Blue", family = "serif"),
+        axis.text = element_text( size =15, color ="Red", family ="serif"),
+        plot.title = element_text(size = 25, family= "serif"),
+        legend.title = element_text(size=15, family= "serif"),
+        legend.text = element_text(size=10, family= "serif"))
+
+
+qplot(data=a, x= IMDb.Rating, y= Profit.,color= Genre) + xlim(3,10) + ylim(0, 3000) +
+  ggtitle("Profit Vs IMDb rating group by genre")
+qplot(data= a, x= Genre, fill= Genre) + ggtitle("Number of movies in each genre")
+ 
+ggplot (data=a, aes(x = Gross...US, fill= Genre)) + geom_histogram(binwidth = 1)+
+  ggtitle("Number of movies Vs Gross grouped by genre") + xlab("Gross in Millions (US)") + 
+  ylab("Number of movies")
+```
